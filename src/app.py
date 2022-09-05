@@ -6,7 +6,7 @@ import os
 import os.path as osp
 import re
 import webbrowser
-
+import sys
 import imgviz
 from qtpy import QtCore
 from qtpy.QtCore import Qt
@@ -30,7 +30,8 @@ from src.widgets import LabelListWidgetItem
 from src.widgets import ToolBar
 from src.widgets import UniqueLabelQListWidget
 from src.widgets import ZoomWidget
-
+import traceback
+import time
 
 # FIXME
 # - [medium] Set max zoom value to something big enough for FitWidth/Window
@@ -40,10 +41,14 @@ from src.widgets import ZoomWidget
 # - [high] Deselect shape when clicking and already selected(?)
 # - [low,maybe] Preview images on file dialogs.
 # - Zoom is too "steppy".
-
-
 LABEL_COLORMAP = imgviz.label_colormap(value=200)
+from jade import JadeLogging,CreateSavePath
+try:
+    tmp_path = CreateSavePath("/tmp/labelme")
+    JadeLog = JadeLogging(os.path.join(tmp_path,"Log"), Level="DEBUG")
 
+except:
+    JadeLog = None
 
 class MainWindow(QtWidgets.QMainWindow):
 
@@ -90,7 +95,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Whether we need to save or not.
         self.dirty = False
-
+        sys.excepthook = self.catch_exceptions
         self._noSelectionSlot = False
 
         # Main widgets and related state.
@@ -790,6 +795,17 @@ class MainWindow(QtWidgets.QMainWindow):
         # self.firstStart = True
         # if self.firstStart:
         #    QWhatsThis.enterWhatsThisMode()
+
+    def catch_exceptions(self, ty, value, traceback_str):
+        """
+        捕获异常，并弹窗显示
+        :param ty: 异常的类型
+        :param value: 异常的对象
+        :param traceback: 异常的traceback
+        """
+        traceback_format = traceback.format_exception(ty, value, traceback_str)
+        traceback_string = "".join(traceback_format)
+        JadeLog.ERROR("程序运行异常,异常原因为:{}".format(traceback_string))
 
     def menu(self, title, actions=None):
         menu = self.menuBar().addMenu(title)
@@ -2018,3 +2034,9 @@ class MainWindow(QtWidgets.QMainWindow):
                     images.append(relativePath)
         images.sort(key=lambda x: x.lower())
         return images
+
+    def closeEvent(self, event):
+        JadeLog.DEBUG("程序退出")
+        event.accept()
+        time.sleep(0.01)
+        os._exit(1)

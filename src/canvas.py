@@ -6,6 +6,7 @@ from src.labelmeConfig import QT5
 from src.shape import Shape
 from src.labelmeConfig import *
 
+
 # TODO(unknown):
 # - [maybe] Find optimal epsilon value.
 
@@ -621,7 +622,7 @@ class Canvas(QtWidgets.QWidget):
         # m = (p1-p2).manhattanLength()
         # print "d %.2f, m %d, %.2f" % (d, m, d - m)
         # divide by scale to allow more precision when zoomed in
-        return labelme.utils.distance(p1 - p2) < (self.epsilon / self.scale)
+        return distance(p1 - p2) < (self.epsilon / self.scale)
 
     def intersectionPoint(self, p1, p2):
         # Cycle through each image edge in clockwise fashion,

@@ -13,7 +13,7 @@ import os
 import os.path as osp
 import sys
 import yaml
-
+from jade import JadeLogging
 from qtpy import QtCore
 from qtpy import QtWidgets
 from src.labelmeConfig import __appname__
