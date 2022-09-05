@@ -20,8 +20,7 @@ if __name__ == '__main__':
                             default=["config","translate","icons"])
         parser.add_argument('--full', type=bool,
                             default=False)  ## 打包成一个完成的包
-        parser.add_argument('--scripts_path', type=str,
-                            default=r"C:\Python3.6.7\Scripts")  ## 打包成一个完成的包
+        parser.add_argument('--lib_path', type=str, default="labelImg_lib32")  ## 是否lib包分开打包
 
     else:
         parser.add_argument('--extra_sys_list', type=list,
@@ -31,6 +30,7 @@ if __name__ == '__main__':
                             default=[])
         parser.add_argument('--full', type=bool,
                             default=True)  ## 打包成一个完成的包
+        parser.add_argument('--lib_path', type=str, default="labelImg_lib64")  ## 是否lib包分开打包
 
 
     parser.add_argument('--use_jade_log', type=bool,
@@ -45,13 +45,12 @@ if __name__ == '__main__':
                         default="标注工具-Labelme")  ##需要打包的文件名称
     parser.add_argument('--appimage', type=bool,
                         default=True)  ## 是否打包成AppImage
-    parser.add_argument('--lib_path', type=str, default="labelme_lib64")  ## 是否lib包分开打包
     parser.add_argument('--is_qt', type=bool, default=False)  ## qt 会将controller view src 都进行编译
-    parser.add_argument('--specify_files',type=list,default=["label_dialog.py"]) ## 指定编译的文件
+    parser.add_argument('--specify_files',type=list,default=[]) ## 指定编译的文件
     args = parser.parse_args()
     # writePy(args)
-    # build(args)
-    # packAPP(args)
-    # copy_build(args, r"G:\SVN\软件\标注工具\标注工具-Labelme\{}".format(args.name + "V" + args.app_version))
-    packSetup(args,r"G:\SVN\软件\标注工具\标注工具-Labelme\{}\Windows".format(args.name + "V" + args.app_version),"1500143e-2cea-11ed-b11e-220db03570cb")
+    build(args)
+    packAPP(args)
+    #copy_build(args, r"G:\SVN\软件\标注工具\标注工具-Labelme\{}".format(args.name + "V" + args.app_version))
+    #packSetup(args,r"G:\SVN\软件\标注工具\标注工具-Labelme\{}\Windows".format(args.name + "V" + args.app_version),"1500143e-2cea-11ed-b11e-220db03570cb")
 
