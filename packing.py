@@ -46,11 +46,11 @@ if __name__ == '__main__':
     parser.add_argument('--appimage', type=bool,
                         default=True)  ## 是否打包成AppImage
     parser.add_argument('--is_qt', type=bool, default=False)  ## qt 会将controller view src 都进行编译
-    parser.add_argument('--specify_files',type=list,default=[]) ## 指定编译的文件
+    parser.add_argument('--specify_files',type=list,default=["samplesMain.py"]) ## 指定编译的文件
     args = parser.parse_args()
     # writePy(args)
-    build(args)
-    packAPP(args)
+    #build(args)
+    #packAPP(args)
     #copy_build(args, r"G:\SVN\软件\标注工具\标注工具-Labelme\{}".format(args.name + "V" + args.app_version))
-    #packSetup(args,r"G:\SVN\软件\标注工具\标注工具-Labelme\{}\Windows".format(args.name + "V" + args.app_version),"1500143e-2cea-11ed-b11e-220db03570cb")
+    packSetup(args,r"G:\SVN\软件\标注工具\标注工具-Labelme\{}\Windows".format(args.name + "V" + args.app_version),"1500143e-2cea-11ed-b11e-220db03570cb")
 
