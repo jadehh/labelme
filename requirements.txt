@@ -7,3 +7,4 @@ pyyaml==6.0
 imgviz==1.5.1
 qtpy==2.0.1
 https://gh.con.sh/https://github.com/jadehh/pythonTools/releases/download/JadeV1.9.4/jade-1.9.4-py3-none-any.whl
+cython==0.29.33
