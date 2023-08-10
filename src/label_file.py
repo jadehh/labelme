@@ -141,8 +141,12 @@ class LabelFile(object):
         # Only replace data after everything is loaded.
         self.flags = flags
         self.shapes = shapes
-        self.imagePath = imagePath
         self.imageData = imageData
+        if self.imageData:
+            self.imagePath = osp.splitext(filename)[0] + ".jpg"
+        else:
+            self.imagePath = imagePath
+
         self.filename = filename
         self.otherData = otherData
 
