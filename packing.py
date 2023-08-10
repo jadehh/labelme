@@ -7,6 +7,15 @@
 # @Software : Samples
 # @Desc     :
 from jade import *
+def zip_lib_package(args):
+    install_path = os.path.join(os.getcwd(),
+                                "releases/{}/{}".format(args.name + "V" + args.app_version, getOperationSystem()))
+    if getOperationSystem() == "Windows":
+        zip_file(os.path.join(install_path,args.lib_path),os.path.join("Output/{}".format("Windows_lib32.zip")))
+    elif getOperationSystem() == "Darwin":
+        pass
+    else:
+        zip_file(os.path.join(install_path,args.lib_path),os.path.join("Output/{}_lib64.zip".format(getOperationSystem())))
 
 
 if __name__ == '__main__':
@@ -44,6 +53,11 @@ if __name__ == '__main__':
     args = parser.parse_args()
     build(args)
     packAPP(args)
+    install_path = os.path.join(os.getcwd(),
+                                "releases/{}/{}".format(args.name + "V" + args.app_version, getOperationSystem()))
+    ouput_name = get_app_name(args) + "_setup" + "-V" + args.app_version[:-2] + "-" + args.app_version[
+                -1]
+    packSetup(args, install_path, "{{7676530c-374a-11ee-a5ce-220db03570cb}", ouput_name)
     zip_lib_package(args)
 
 
