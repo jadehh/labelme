@@ -25,7 +25,7 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
-          body_path: README.md
+          body_path: CONTRIBUTING.md
           draft: false
           prerelease: false
   other:
@@ -69,6 +69,7 @@ jobs:
       - name: Windows操作系统准备打包环境
         shell: pwsh
         run: |
+          cd code
           pip install -r requirements.txt
       - name: 编译打包
         env:
