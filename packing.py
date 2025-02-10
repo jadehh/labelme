@@ -48,10 +48,9 @@ if __name__ == '__main__':
     parser.add_argument('--appimage', type=str,
                         default="True")  ## 是否打包成AppImage
     parser.add_argument('--is_auto_packing',type=str,default="False") ##是否自动打包
-    parser.add_argument('--is_qt', type=str, default="True")  ## qt 会将controller view src 都进行编译
+    parser.add_argument('--is_qt', type=str, default="False")  ## qt 会将controller view src 都进行编译
     parser.add_argument('--specify_files', type=str, default="")  ## 指定编译的文件
     args = parser.parse_args()
-    ui_to_py(args)
     build(args)
     packAPP(args)
     install_path = os.path.join(os.getcwd(),

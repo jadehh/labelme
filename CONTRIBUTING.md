@@ -1,10 +1,14 @@
 ### 更新日志
 
-#### v1.0.4 - 2025-02-10
-* 测试Windows下自动打包
+#### v1.0.5 - 2025-02-10
+* 重新打包
 ---
 
 <details onclose>
+
+#### v1.0.4 - 2025-02-10
+* 测试Windows下自动打包
+---
 
 #### v1.0.3 - 2023-08-10
 * 解决TypeError: paintCanvas() takes exactly 1 positional argument (2 given)
