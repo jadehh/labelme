@@ -45,7 +45,7 @@ jobs:
       - name: 下载代码
         uses: actions/checkout@v3
         with:
-          repository: jadehh/labelme
+          repository: jadehh/AlgorithmConfigUI
           ref: main
           path: code
           token: ${{ secrets.GH_PAT }} # `GH_PAT` is a secret that contains your PAT
@@ -70,6 +70,7 @@ jobs:
         shell: pwsh
         run: |
           cd code
+          pip install pywin32
           pip install -r requirements.txt
       - name: 编译打包
         env:
