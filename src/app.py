@@ -1622,7 +1622,7 @@ class MainWindow(QtWidgets.QMainWindow):
         ]
         if event.mimeData().hasUrls():
             items = [i.toLocalFile() for i in event.mimeData().urls()]
-            if any([i.lower().endswith(tuple(extensions)) for i in items]):
+            if any(i.lower().endswith(tuple(extensions)) for i in items):
                 event.accept()
         else:
             event.ignore()
