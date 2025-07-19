@@ -42,6 +42,13 @@ jobs:
         os: ["windows-latest"] # "ubuntu-18.04", "windows-latest","macos-latest"
         python-version: ["3.6"]
     steps:
+      - name: Set up MSVC v142
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x86
+          toolset: 14.2   # 对应v142
+          vs_version: 16  # VS2019
+
       - name: 下载代码
         uses: actions/checkout@v3
         with:
