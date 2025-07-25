@@ -39,7 +39,7 @@ jobs:
       fail-fast: false
       matrix:
 #        os: ["windows-latest"] # "ubuntu-18.04", "windows-latest
-        os: ["windows-latest"] # "ubuntu-18.04", "windows-latest","macos-latest"
+        os: ["windows-2019"] # "ubuntu-18.04", "windows-latest","macos-latest"
         python-version: ["3.6"]
     steps:
       - name: 下载代码
@@ -58,7 +58,7 @@ jobs:
           Start-Service docker
           
           # 拉取 Windows Server 2012 基础镜像
-          docker pull mcr.microsoft.com/windows/servercore:ltsc2012
+          docker pull mcr.microsoft.com/windows/servercore:ltsc2019
           
           # 验证镜像
           docker images
