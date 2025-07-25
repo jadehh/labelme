@@ -42,6 +42,29 @@ jobs:
         os: ["windows-latest"] # "ubuntu-18.04", "windows-latest","macos-latest"
         python-version: ["3.6"]
     steps:
+      # 安装Visual Studio 2019构建工具（仅安装需要的组件）
+      - name: Install VS2019 Build Tools
+        shell: powershell
+        run: |
+          # 下载VS2019安装程序
+          Invoke-WebRequest -Uri "https://aka.ms/vs/16/release/vs_buildtools.exe" -OutFile vs_buildtools.exe
+          
+          # 安装必要的组件：VC++ 2019工具集和Windows 10 SDK
+          Start-Process -FilePath .\vs_buildtools.exe -ArgumentList `
+            '--quiet', '--norestart', '--wait', '--nocache', `
+            '--add', 'Microsoft.VisualStudio.Workload.VCTools', `
+            '--add', 'Microsoft.VisualStudio.Component.VC.v142.x86.x64', `
+            '--add', 'Microsoft.VisualStudio.Component.Windows10SDK.19041' `
+            -NoNewWindow -Wait
+          Remove-Item -Force vs_buildtools.exe
+
+      # 设置VS2019的环境变量
+      - name: Setup VC Environment
+        shell: cmd
+        run: |
+          echo "Setting up VC environment..."
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
+          echo "VCVARS=%VCINSTALLDIR%" >> %GITHUB_ENV%
       - name: 下载代码
         uses: actions/checkout@v3
         with:

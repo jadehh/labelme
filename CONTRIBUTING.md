@@ -1,10 +1,15 @@
 ### 更新日志
 
+#### v1.0.9 - 2025-07-19
+* 使用Visual Studio 2019 进行打包
+---
+
+<details onclose>
+
 #### v1.0.8 - 2025-07-19
 * 测试Windows下自动打包
 ---
 
-<details onclose>
 
 #### v1.0.7 - 2025-07-19
 * 测试Windows下自动打包
