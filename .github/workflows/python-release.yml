@@ -49,22 +49,20 @@ jobs:
           ref: main
           path: code
           token: ${{ secrets.GH_PAT }} # `GH_PAT` is a secret that contains your PAT
-      # 安装 VS2019 构建工具（兼容 Server 2012）
-      - name: Install VS2019 Build Tools
+      # 配置 Docker 环境
+      - name: Set up Docker
         run: |
-          choco install visualstudio2019buildtools -y --version=16.11.26.0
-          choco install visualstudio2019-workload-nativedesktop -y
-          choco install windows-sdk-10-version-19041-all -y --version=10.0.19041.0
+          # 安装 Docker（Windows Server 2022 内置 Docker EE）
+          Install-WindowsFeature -Name Containers
+          Start-Service docker
 
-        # 设置兼容性环境
-      - name: Set compatibility environment
-        shell: cmd
+      # 准备 Windows Server 2019 Docker 镜像
+      - name: Prepare Windows Server 2019 container
+        shell: pwsh
         run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
-          echo "PlatformToolset=v141" >> "%GITHUB_ENV%"
-          echo "WindowsTargetPlatformVersion=8.1" >> "%GITHUB_ENV%"
-          echo "CL=/MT /D_WIN32_WINNT=0x0602" >> "%GITHUB_ENV%"
-          echo "LINK=/SUBSYSTEM:CONSOLE,6.02" >> "%GITHUB_ENV%"
+          # 拉取 Windows Server 2019 LTSC 官方镜像
+          docker pull mcr.microsoft.com/windows/servercore:ltsc2019
+
       - name: Windows操作系统安装Inno Setup 下载
         if: runner.os == 'Windows'
         uses: actions/checkout@v3
