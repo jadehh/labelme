@@ -42,48 +42,6 @@ jobs:
         os: ["windows-latest"] # "ubuntu-18.04", "windows-latest","macos-latest"
         python-version: ["3.6"]
     steps:
- # 安装 Visual Studio 2019
-      - name: Install Visual Studio 2019
-        uses: microsoft/setup-vs-2019@v1
-        with:
-          # 组件选择 - 精简安装
-          components: |
-            Microsoft.VisualStudio.Workload.NativeDesktop
-            Microsoft.VisualStudio.Component.VC.v141.x86.x64
-            Microsoft.VisualStudio.Component.Windows10SDK.19041
-            Microsoft.Component.MSBuild
-            Microsoft.VisualStudio.Component.TestTools.BuildTools
-
-        # 可选添加组件（根据需要添加）
-        # additional-components: Microsoft.VisualStudio.Component.VC.v141.ARM64
-
-    # 设置 VS2019 环境变量
-      - name: Set up VS2019 environment
-        shell: cmd
-        run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          echo "VS2019DIR=C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise" >> "%GITHUB_ENV%"
-          echo "VCTOOLS_DIR=C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\" >> "%GITHUB_ENV%"
-        
-          # 自动查找最新的工具版本
-          for /F "tokens=*" %%d in ('dir /B /AD "%VCTOOLS_DIR%" ^| sort /R') do (
-            set "TOOLSET_VERSION=%%d"
-            goto :found
-          )
-          :found
-          echo "Using toolset version: %TOOLSET_VERSION%"
-          echo "TOOLSET_VERSION=%TOOLSET_VERSION%" >> "%GITHUB_ENV%"
-          echo "::add-path::%VS2019DIR%\MSBuild\Current\Bin"
-          echo "::add-path::%VCTOOLS_DIR%\%TOOLSET_VERSION%\bin\Hostx64\x64"
-
-    # 验证安装
-      - name: Verify VS2019 installation
-        shell: cmd
-        run: |
-          where msbuild
-          cl
-          msbuild /version
-
       - name: 下载代码
         uses: actions/checkout@v3
         with:
@@ -91,6 +49,19 @@ jobs:
           ref: main
           path: code
           token: ${{ secrets.GH_PAT }} # `GH_PAT` is a secret that contains your PAT
+      # 设置 Docker 环境（Windows Server 2022 已内置 Docker）
+      - name: Set up Docker
+        shell: powershell
+        run: |
+          # 启用容器功能（如果尚未启用）
+          Install-WindowsFeature -Name Containers -ErrorAction SilentlyContinue
+          Start-Service docker
+          
+          # 拉取 Windows Server 2012 基础镜像
+          docker pull mcr.microsoft.com/windows/servercore:ltsc2012
+          
+          # 验证镜像
+          docker images
       - name: Windows操作系统安装Inno Setup 下载
         if: runner.os == 'Windows'
         uses: actions/checkout@v3
