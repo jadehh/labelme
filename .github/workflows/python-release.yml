@@ -39,7 +39,7 @@ jobs:
       fail-fast: false
       matrix:
 #        os: ["windows-latest"] # "ubuntu-18.04", "windows-latest
-        os: ["windows-2019"] # "ubuntu-18.04", "windows-latest","macos-latest"
+        os: ["windows-latest"] # "ubuntu-18.04", "windows-latest","macos-latest"
         python-version: ["3.6"]
     steps:
       - name: 下载代码
@@ -49,19 +49,24 @@ jobs:
           ref: main
           path: code
           token: ${{ secrets.GH_PAT }} # `GH_PAT` is a secret that contains your PAT
-      # 设置 Docker 环境（Windows Server 2022 已内置 Docker）
-      - name: Set up Docker
+      - name: Install Visual Studio 2019 Build Tools
         shell: powershell
         run: |
-          # 启用容器功能（如果尚未启用）
-          Install-WindowsFeature -Name Containers -ErrorAction SilentlyContinue
-          Start-Service docker
-          
-          # 拉取 Windows Server 2012 基础镜像
-          docker pull mcr.microsoft.com/windows/servercore:ltsc2019
-          
-          # 验证镜像
-          docker images
+          $installerPath = "$env:TEMP\vs_buildtools.exe"
+          Invoke-WebRequest -Uri "https://aka.ms/vs/16/release/vs_buildtools.exe" -OutFile $installerPath
+          Start-Process -Wait -FilePath $installerPath -ArgumentList `
+            '--quiet', '--norestart', '--nocache',
+            '--add Microsoft.VisualStudio.Workload.VCTools',
+            '--add Microsoft.VisualStudio.Component.VC.v142.x86.x64',
+            '--add Microsoft.VisualStudio.Component.Windows10SDK.19041'
+
+      - name: Set up VS2019 environment
+        shell: cmd
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
+          echo "INCLUDE=%INCLUDE%" >> $env:GITHUB_ENV
+          echo "LIB=%LIB%" >> $env:GITHUB_ENV
+          echo "PATH=%PATH%" >> $env:GITHUB_ENV
       - name: Windows操作系统安装Inno Setup 下载
         if: runner.os == 'Windows'
         uses: actions/checkout@v3

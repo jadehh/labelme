@@ -1,7 +1,7 @@
 ### 更新日志
 
 #### v1.1.1 - 2025-07-25
-* 使用Docker镜像打包
+* 使用Visual Studio 2019 进行打包
 ---
 
 <details onclose>
