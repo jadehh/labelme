@@ -73,7 +73,7 @@ jobs:
 
         # 关键步骤：设置编译环境变量
       - name: Set dynamic runtime (/MD)
-        shell: powershell
+        shell: pwsh
         run: $env:CL = "/MD"
 
       - name: Build with easycython
