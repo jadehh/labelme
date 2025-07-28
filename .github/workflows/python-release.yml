@@ -72,12 +72,12 @@ jobs:
           cd code
           pip install -r requirements.txt
       - name: 编译打包
+        shell: cmd
         env:
           PYTHONIOENCODING: "utf-8"
           # 设置环境变量以传递编译器和链接器选项
           CFLAGS: /MD
           LDFLAGS: /MD
-        shell: pwsh
         run: |
           cd code
           python packing.py   # --specify_files samplesMain.py
