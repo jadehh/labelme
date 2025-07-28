@@ -49,11 +49,6 @@ jobs:
           ref: main
           path: code
           token: ${{ secrets.GH_PAT }} # `GH_PAT` is a secret that contains your PAT
-      - name: 设置动态链接环境
-        shell: cmd
-        run: |
-          echo 已设置动态链接：%CL%
-
       - name: Windows操作系统安装Inno Setup 下载
         if: runner.os == 'Windows'
         uses: actions/checkout@v3
@@ -79,6 +74,9 @@ jobs:
       - name: 编译打包
         env:
           PYTHONIOENCODING: "utf-8"
+          # 设置环境变量以传递编译器和链接器选项
+          CFLAGS: /MD
+          LDFLAGS: /MD
         shell: pwsh
         run: |
           cd code
