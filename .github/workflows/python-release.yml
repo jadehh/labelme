@@ -79,6 +79,7 @@ jobs:
       - name: Build with easycython
         run: |
           # 列出要编译的所有 Python 文件
+          cd code
           easycython main.py
           # 或编译单个文件：easycython your_module.py
 
