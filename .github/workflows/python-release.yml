@@ -71,13 +71,13 @@ jobs:
         run: |
           cd code
           pip install easycython
-      - name: Set dynamic runtime
-        shell: powershell
-        run: $env:CL = "/MD"  # 强制使用动态链接
       - name: Run easycython
         run: |
           cd code
+          $env:CL = "/MD"
           easycython main.py -compile-args "/MD" --link-args "/MD"
+        shell: powershell  # 使用PowerShell以便设置环境变量
+
       - name: 测试是否打包完成
         shell: pwsh
         run: |
