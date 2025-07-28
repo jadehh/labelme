@@ -70,17 +70,12 @@ jobs:
         shell: pwsh
         run: |
           cd code
-          pip install -r requirements.txt
-      - name: 编译打包
-        env:
-          PYTHONIOENCODING: "utf-8"
-          DISTUTILS_USE_SDK: 1
-          MSSdk: 1
-          CL: "/MD"
-        run: |
-          cd code
-          python packing.py   # --specify_files samplesMain.py
-
+          pip install easycython
+      - name: Set dynamic runtime
+        shell: powershell
+        run: $env:CL = "/MD"  # 强制使用动态链接
+      - name: Run easycython
+        run: easycython main.py
       - name: 测试是否打包完成
         shell: pwsh
         run: |
