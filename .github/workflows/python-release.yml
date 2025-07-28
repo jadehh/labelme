@@ -72,7 +72,7 @@ jobs:
           cd code
           pip install -r requirements.txt
       - name: 编译打包
-        shell: cmd
+        shell: powershell
         env:
           PYTHONIOENCODING: "utf-8"
           # 设置环境变量以传递编译器和链接器选项
