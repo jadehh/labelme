@@ -82,16 +82,4 @@ jobs:
           easycython main.py
           # 或编译单个文件：easycython your_module.py
 
-      # 验证是否成功使用 /MD
-      - name: Verify runtime linkage
-        run: |
-          # 查找生成的 .pyd 文件
-          $pyd = Get-ChildItem -Filter *.pyd -Recurse | Select-Object -First 1
-        
-          # 验证运行时依赖
-          if ($pyd) {
-            & dumpbin /DEPENDENTS $pyd.FullName | Select-String "MSVCR"
-          } else {
-            Write-Host "No .pyd files found"
-        }
-        shell: powershell
+
