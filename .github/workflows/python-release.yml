@@ -75,7 +75,9 @@ jobs:
         shell: powershell
         run: $env:CL = "/MD"  # 强制使用动态链接
       - name: Run easycython
-        run: easycython main.py
+        run: |
+          cd code
+          easycython main.py
       - name: 测试是否打包完成
         shell: pwsh
         run: |
