@@ -66,29 +66,32 @@ jobs:
         shell: pwsh
         run: |
           python -m pip install --upgrade pip
-      - name: Windows操作系统准备打包环境
-        shell: pwsh
+      - name: Install dependencies
         run: |
-          cd code
-          pip install easycython
-      - name: Run easycython
-        run: |
-          cd code
-          $env:CL = "/MD"
-          easycython main.py
-        shell: powershell  # 使用PowerShell以便设置环境变量
+          python -m pip install --upgrade pip
+          pip install cython easycython
 
-      - name: 测试是否打包完成
-        shell: pwsh
+        # 关键步骤：设置编译环境变量
+      - name: Set dynamic runtime (/MD)
+        shell: powershell
+        run: $env:CL = "/MD"
+
+      - name: Build with easycython
         run: |
-          cd code/Output
-          ls
-      # 发布
-      - name: 发布
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files:
-            "./code/Output/*"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }} # 给最高的权限
+          # 列出要编译的所有 Python 文件
+          easycython main.py
+          # 或编译单个文件：easycython your_module.py
+
+      # 验证是否成功使用 /MD
+      - name: Verify runtime linkage
+        run: |
+          # 查找生成的 .pyd 文件
+          $pyd = Get-ChildItem -Filter *.pyd -Recurse | Select-Object -First 1
+        
+          # 验证运行时依赖
+          if ($pyd) {
+            & dumpbin /DEPENDENTS $pyd.FullName | Select-String "MSVCR"
+          } else {
+            Write-Host "No .pyd files found"
+        }
+        shell: powershell
