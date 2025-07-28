@@ -75,7 +75,7 @@ jobs:
         run: |
           cd code
           $env:CL = "/MD"
-          easycython main.py -compile-args "/MD" --link-args "/MD"
+          easycython main.py
         shell: powershell  # 使用PowerShell以便设置环境变量
 
       - name: 测试是否打包完成
