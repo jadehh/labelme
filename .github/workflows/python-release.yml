@@ -49,21 +49,10 @@ jobs:
           ref: main
           path: code
           token: ${{ secrets.GH_PAT }} # `GH_PAT` is a secret that contains your PAT
-      - name: 设置兼容性编译环境
+      - name: 设置动态链接环境
         shell: cmd
         run: |
-          :: 降级到VS2019兼容模式
-          echo "VS_VERSION=14.29" >> %GITHUB_ENV%
-    
-          :: 强制使用2012兼容SDK
-          echo "WindowsSDKVersion=8.1" >> %GITHUB_ENV%
-          echo "PlatformToolset=v142" >> %GITHUB_ENV%  # VS2019工具链
-          :: 设置全局编译标志
-          echo "CL=/MD /D_WIN32_WINNT=0x0602 /DNTDDI_VERSION=0x06020000 /D_USING_V110_SDK71_ /GS- /Zc:wchar_t-" >> %GITHUB_ENV%
-          echo "LINK=/SUBSYSTEM:CONSOLE,6.02 /NODEFAULTLIB:libucrt.lib" >> %GITHUB_ENV%
-    
-          :: 重定向SDK路径
-          reg add "HKLM\SOFTWARE\Microsoft\Microsoft SDKs\Windows\v8.1" /v InstallationFolder /t REG_SZ /d "C:\Program Files (x86)\Microsoft SDKs\Windows\v8.1\" /f
+          echo 已设置动态链接：%CL%
 
       - name: Windows操作系统安装Inno Setup 下载
         if: runner.os == 'Windows'
