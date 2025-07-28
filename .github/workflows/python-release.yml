@@ -72,12 +72,11 @@ jobs:
           cd code
           pip install -r requirements.txt
       - name: 编译打包
-        shell: powershell
         env:
           PYTHONIOENCODING: "utf-8"
-          # 设置环境变量以传递编译器和链接器选项
-          CFLAGS: /MD
-          LDFLAGS: /MD
+          DISTUTILS_USE_SDK: 1
+          MSSdk: 1
+          CL: "/MD"
         run: |
           cd code
           python packing.py   # --specify_files samplesMain.py
