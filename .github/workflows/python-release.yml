@@ -77,7 +77,7 @@ jobs:
       - name: Run easycython
         run: |
           cd code
-          easycython main.py
+          easycython main.py -compile-args "/MD" --link-args "/MD"
       - name: 测试是否打包完成
         shell: pwsh
         run: |
