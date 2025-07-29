@@ -30,7 +30,7 @@ jobs:
           prerelease: false
   other:
     name: 打包发布-操作系统版本:(${{ matrix.os }},Python版本:${{ matrix.python-version }})
-    runs-on: self-hosted
+    runs-on: ${{ matrix.os }}
     permissions:
       contents: read
       security-events: write
@@ -63,30 +63,34 @@ jobs:
           python-version: ${{ matrix.python-version }}
           architecture: x86
       - name: pip升级
-        shell: powershell
+        shell: pwsh
         run: |
           python -m pip install --upgrade pip
-      - name: Install dependencies
+      - name: Windows操作系统准备打包环境
+        shell: pwsh
         run: |
-          python -m pip install --upgrade pip
-          pip install cython easycython
-      # 设置编译环境变量
-      - name: Set compiler options
-        shell: powershell
-        run: echo "CL=/MD /O2" >> $env:GITHUB_ENV
-
-      # 验证环境变量
-      - name: Check environment
-        shell: powershell
-        run: |
-          echo %CL%
-          set CL
-      - name: Build with easycython
-        shell: cmd
-        run: |
-          # 列出要编译的所有 Python 文件
           cd code
-          easycython main.py
-          # 或编译单个文件：easycython your_module.py
+          pip install --upgrade setuptools
+          pip install -r requirements.txt
+      - name: 编译打包
+        env:
+          PYTHONIOENCODING: "utf-8"
+        shell: pwsh
+        run: |
+          cd code
+          python packing.py   # --specify_files samplesMain.py
 
-
+      - name: 测试是否打包完成
+        shell: pwsh
+        run: |
+          cd code/Output
+          ls
+      # 发布
+      - name: 发布
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files:
+            "./code/Output/*"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }} # 给最高的权限
