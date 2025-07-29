@@ -30,7 +30,7 @@ jobs:
           prerelease: false
   other:
     name: 打包发布-操作系统版本:(${{ matrix.os }},Python版本:${{ matrix.python-version }})
-    runs-on: ${{ matrix.os }}
+    runs-on: self-host
     permissions:
       contents: read
       security-events: write
@@ -40,7 +40,7 @@ jobs:
       matrix:
 #        os: ["windows-latest"] # "ubuntu-18.04", "windows-latest
         os: ["windows-latest"] # "ubuntu-18.04", "windows-latest","macos-latest"
-        python-version: ["3.8.10"]
+        python-version: ["3.6"]
     steps:
       - name: 下载代码
         uses: actions/checkout@v3
